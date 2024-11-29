@@ -118,7 +118,7 @@
 
             <!-- Message d'erreur -->
             <div class="error-message" id="error-message">
-                Veuillez entrer une adresse email valide (par exemple : ex@gmail.com ou ex@yahoo.com).
+                Veuillez entrer une adresse email valide (par exemple : votre_email@gmail.com).
             </div>
 
             <p>Nous vous répondrons dans les plus brefs délais !</p>
@@ -134,10 +134,10 @@
             const email = document.getElementById("email").value;
             const message = document.getElementById("message").value;
 
-            // Expression régulière pour valider les adresses email de type "gmail.com" et "yahoo.com"
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+            // Expression régulière pour valider les adresses email de type "gmail.com"
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
-            // Vérifier si l'email est valide (seulement gmail.com ou yahoo.com)
+            // Vérifier si l'email est valide (seulement gmail.com pour cet exemple)
             if (!emailRegex.test(email)) {
                 document.getElementById("error-message").style.display = "block";
                 return;  // Ne soumettre pas le formulaire si l'email est invalide
