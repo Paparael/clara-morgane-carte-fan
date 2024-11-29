@@ -118,7 +118,7 @@
 
             <!-- Message d'erreur -->
             <div class="error-message" id="error-message">
-                Veuillez entrer une adresse email valide (par exemple : votre_email@gmail.com).
+                Veuillez entrer une adresse email valide (par exemple : votre_email@gmail.com ou votre_email@yahoo.com).
             </div>
 
             <p>Nous vous répondrons dans les plus brefs délais !</p>
@@ -134,10 +134,10 @@
             const email = document.getElementById("email").value;
             const message = document.getElementById("message").value;
 
-            // Expression régulière pour valider les adresses email de type "gmail.com"
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            // Expression régulière pour valider les adresses email "gmail.com" ou "yahoo.com"
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
 
-            // Vérifier si l'email est valide (seulement gmail.com pour cet exemple)
+            // Vérifier si l'email est valide (accepte gmail et yahoo)
             if (!emailRegex.test(email)) {
                 document.getElementById("error-message").style.display = "block";
                 return;  // Ne soumettre pas le formulaire si l'email est invalide
@@ -164,10 +164,12 @@
                     document.getElementById("message").value = "";
                     
                     // Affiche le message de confirmation
-                    localStorage.setItem("form-submitted", "true");  // Stocke l'info dans localStorage
+                    document.getElementById("confirmation-message").style.display = "block";
                     
-                    // Actualise la page
-                    window.location.reload();
+                    // Cache le message de confirmation après 5 secondes
+                    setTimeout(() => {
+                        document.getElementById("confirmation-message").style.display = "none";
+                    }, 5000);
                 } else {
                     console.error("Erreur lors de l'envoi du message.");
                 }
@@ -176,14 +178,189 @@
                 console.error("Erreur réseau :", error);
             });
         });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Carte Fan de Clara Morgane</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe6f0, #f3f4ff);
+            color: #333;
+        }
+        header {
+            background: #ff6699;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px #333;
+        }
+        main {
+            padding: 2rem;
+            text-align: center;
+        }
+        .contact-section {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .contact-section h2 {
+            margin-bottom: 1rem;
+            color: #ff6699;
+        }
+        .contact-section p {
+            margin-bottom: 1rem;
+        }
+        .contact-section form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-section label {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .contact-section input, .contact-section textarea {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .contact-section textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .contact-section button {
+            margin-top: 1.5rem;
+            background: #ff6699;
+            color: white;
+            font-size: 1rem;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .contact-section button:hover {
+            background: #ff3366;
+        }
+        .confirmation-message {
+            display: none;
+            margin-top: 1rem;
+            color: green;
+            font-weight: bold;
+        }
+        .error-message {
+            display: none;
+            margin-top: 1rem;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Contactez Clara Morgane</h1>
+    </header>
+    <main>
+        <section class="contact-section">
+            <h2>Nous Contacter</h2>
+            <p>Vous avez des questions sur la carte fan de Clara Morgane ? Vous souhaitez en savoir plus sur nos offres exclusives ? Contactez-nous via le formulaire ci-dessous :</p>
+            
+            <!-- Formulaire de contact via Formspree -->
+            <form id="contact-form" action="https://formspree.io/f/xjkvaqpn" method="POST">
+                <label for="email">Votre email :</label>
+                <input type="email" id="email" name="email" placeholder="Votre adresse e-mail" required>
 
-        // Vérifie si un message a été envoyé après le rechargement de la page
-        window.onload = function() {
-            if (localStorage.getItem("form-submitted") === "true") {
-                document.getElementById("confirmation-message").style.display = "block";
-                localStorage.removeItem("form-submitted");  // Nettoie l'information
+                <label for="message">Votre message :</label>
+                <textarea id="message" name="message" placeholder="Écrivez votre message ici..." required></textarea>
+
+                <button type="submit">Envoyer</button>
+            </form>
+
+            <!-- Message de confirmation -->
+            <div class="confirmation-message" id="confirmation-message">
+                Merci pour votre message ! Nous reviendrons vers vous bientôt.
+            </div>
+
+            <!-- Message d'erreur -->
+            <div class="error-message" id="error-message">
+                Veuillez entrer une adresse email valide (par exemple : votre_email@gmail.com ou votre_email@yahoo.com).
+            </div>
+
+            <p>Nous vous répondrons dans les plus brefs délais !</p>
+        </section>
+    </main>
+
+    <script>
+        // Fonction pour gérer la soumission du formulaire
+        document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault();  // Empêche le formulaire de se soumettre et de rediriger
+
+            // Récupère les valeurs des champs
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            // Expression régulière pour valider les adresses email "gmail.com" ou "yahoo.com"
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+
+            // Vérifier si l'email est valide (accepte gmail et yahoo)
+            if (!emailRegex.test(email)) {
+                document.getElementById("error-message").style.display = "block";
+                return;  // Ne soumettre pas le formulaire si l'email est invalide
+            } else {
+                document.getElementById("error-message").style.display = "none";
             }
-        };
+
+            // Envoi des données à Formspree
+            fetch("https://formspree.io/f/xjkvaqpn", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    email: email,
+                    message: message
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Message envoyé !");
+                    // Réinitialisation des champs
+                    document.getElementById("email").value = "";
+                    document.getElementById("message").value = "";
+                    
+                    // Affiche le message de confirmation
+                    document.getElementById("confirmation-message").style.display = "block";
+                    
+                    // Cache le message de confirmation après 5 secondes
+                    setTimeout(() => {
+                        document.getElementById("confirmation-message").style.display = "none";
+                    }, 5000);
+                } else {
+                    console.error("Erreur lors de l'envoi du message.");
+                }
+            })
+            .catch(error => {
+                console.error("Erreur réseau :", error);
+            });
+        });
     </script>
 </body>
 </html>
