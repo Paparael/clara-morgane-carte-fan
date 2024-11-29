@@ -126,6 +126,7 @@
     </main>
 
     <script>
+        // Fonction pour gérer la soumission du formulaire
         document.getElementById("contact-form").addEventListener("submit", function(event) {
             event.preventDefault();  // Empêche la soumission du formulaire et le rechargement de la page
 
@@ -168,7 +169,7 @@
                     // Masquer le message après 5 secondes
                     setTimeout(() => {
                         document.getElementById("confirmation-message").style.display = "none";
-                    }, 5000);
+                    }, 5000); // Le message disparaît après 5 secondes
                 } else {
                     console.error("Erreur lors de l'envoi du message.");
                 }
