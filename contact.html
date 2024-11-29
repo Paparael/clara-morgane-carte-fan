@@ -118,7 +118,7 @@
 
             <!-- Message d'erreur -->
             <div class="error-message" id="error-message">
-                Veuillez entrer une adresse email valide (par exemple : exemple@gmail.com ou exemple@yahoo.com).
+                Veuillez entrer une adresse email valide (par exemple : ex@gmail.com ou ex@yahoo.com).
             </div>
 
             <p>Nous vous répondrons dans les plus brefs délais !</p>
@@ -128,7 +128,7 @@
     <script>
         // Fonction pour gérer la soumission du formulaire
         document.getElementById("contact-form").addEventListener("submit", function(event) {
-            event.preventDefault();  // Empêche la soumission du formulaire et le rechargement de la page
+            event.preventDefault();  // Empêche le formulaire de se soumettre et de rediriger
 
             // Récupère les valeurs des champs
             const email = document.getElementById("email").value;
@@ -137,11 +137,10 @@
             // Expression régulière pour valider les adresses email de type "gmail.com" et "yahoo.com"
             const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
 
-            // Vérifier si l'email est valide
+            // Vérifier si l'email est valide (seulement gmail.com ou yahoo.com)
             if (!emailRegex.test(email)) {
-                // Affiche le message d'erreur si l'email n'est pas valide
                 document.getElementById("error-message").style.display = "block";
-                return;  // Ne soumet pas le formulaire si l'email est invalide
+                return;  // Ne soumettre pas le formulaire si l'email est invalide
             } else {
                 document.getElementById("error-message").style.display = "none";
             }
@@ -159,17 +158,16 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Affiche le message de confirmation
-                    document.getElementById("confirmation-message").style.display = "block";
-                    
+                    console.log("Message envoyé !");
                     // Réinitialisation des champs
                     document.getElementById("email").value = "";
                     document.getElementById("message").value = "";
-
-                    // Masquer le message après 5 secondes
-                    setTimeout(() => {
-                        document.getElementById("confirmation-message").style.display = "none";
-                    }, 5000); // Le message disparaît après 5 secondes
+                    
+                    // Affiche le message de confirmation
+                    localStorage.setItem("form-submitted", "true");  // Stocke l'info dans localStorage
+                    
+                    // Actualise la page
+                    window.location.reload();
                 } else {
                     console.error("Erreur lors de l'envoi du message.");
                 }
@@ -178,6 +176,14 @@
                 console.error("Erreur réseau :", error);
             });
         });
+
+        // Vérifie si un message a été envoyé après le rechargement de la page
+        window.onload = function() {
+            if (localStorage.getItem("form-submitted") === "true") {
+                document.getElementById("confirmation-message").style.display = "block";
+                localStorage.removeItem("form-submitted");  // Nettoie l'information
+            }
+        };
     </script>
 </body>
 </html>
