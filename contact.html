@@ -109,7 +109,7 @@
             <div class="confirmation-message" id="confirmation-message">
                 Merci pour votre message ! Nous reviendrons vers vous bientôt.
             </div>
-            
+
             <p>Nous vous répondrons dans les plus brefs délais !</p>
         </section>
     </main>
@@ -122,14 +122,6 @@
             // Récupère les valeurs des champs
             const email = document.getElementById("email").value;
             const message = document.getElementById("message").value;
-
-            // Afficher un message de confirmation
-            const confirmationMessage = document.getElementById("confirmation-message");
-            confirmationMessage.style.display = "block";
-
-            // Effacer les champs après soumission
-            document.getElementById("email").value = "";
-            document.getElementById("message").value = "";
 
             // Envoi des données à Formspree
             fetch("https://formspree.io/f/xjkvaqpn", {
@@ -145,6 +137,15 @@
             .then(response => {
                 if (response.ok) {
                     console.log("Message envoyé !");
+                    // Réinitialisation des champs
+                    document.getElementById("email").value = "";
+                    document.getElementById("message").value = "";
+                    
+                    // Affiche le message de confirmation
+                    localStorage.setItem("form-submitted", "true");  // Stocke l'info dans localStorage
+                    
+                    // Actualise la page
+                    window.location.reload();
                 } else {
                     console.error("Erreur lors de l'envoi du message.");
                 }
@@ -153,6 +154,14 @@
                 console.error("Erreur réseau :", error);
             });
         });
+
+        // Vérifie si un message a été envoyé après le rechargement de la page
+        window.onload = function() {
+            if (localStorage.getItem("form-submitted") === "true") {
+                document.getElementById("confirmation-message").style.display = "block";
+                localStorage.removeItem("form-submitted");  // Nettoie l'information
+            }
+        };
     </script>
 </body>
 </html>
